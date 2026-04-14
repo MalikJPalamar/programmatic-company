@@ -1,0 +1,21 @@
+{
+  "name": "programmatic-company",
+  "version": "0.1.0",
+  "private": true,
+  "description": "UAPP - Universal Agent-to-Production Pipeline",
+  "workspaces": [
+    "router",
+    "builderbee-cli",
+    "aob-cli",
+    "centaurion-cli"
+  ],
+  "scripts": {
+    "test": "npm run test --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "dev:router": "npm run dev -w router",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
