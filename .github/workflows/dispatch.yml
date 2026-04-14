@@ -1,0 +1,66 @@
+name: Agent Dispatch
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Target CLI (builderbee, aob, centaurion)'
+        required: true
+        type: choice
+        options:
+          - builderbee
+          - aob
+          - centaurion
+      command:
+        description: 'CLI command to execute (e.g., clients.list)'
+        required: true
+        type: string
+      args:
+        description: 'JSON arguments (e.g., {"limit": 10})'
+        required: false
+        type: string
+        default: '{}'
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Execute CLI command
+        env:
+          GHL_API_KEY: ${{ secrets.GHL_API_KEY }}
+          GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
+          UAPP_API_KEY: ${{ secrets.UAPP_API_KEY }}
+        run: |
+          TARGET="${{ inputs.target }}"
+          COMMAND="${{ inputs.command }}"
+          ARGS='${{ inputs.args }}'
+
+          echo "Executing: ${TARGET} ${COMMAND}"
+          echo "Args: ${ARGS}"
+
+          case "${TARGET}" in
+            builderbee)
+              # Parse dot-notation command into CLI args
+              GROUP=$(echo "${COMMAND}" | cut -d. -f1)
+              ACTION=$(echo "${COMMAND}" | cut -d. -f2)
+              node builderbee-cli/dist/index.js "${GROUP}" "${ACTION}" --json
+              ;;
+            *)
+              echo "Target ${TARGET} not yet implemented"
+              exit 1
+              ;;
+          esac

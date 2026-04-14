@@ -1,0 +1,19 @@
+services:
+  router:
+    build:
+      context: .
+      dockerfile: router/Dockerfile
+    ports:
+      - "3100:3100"
+    environment:
+      - PORT=3100
+      - UAPP_API_KEY=${UAPP_API_KEY}
+      - GHL_API_KEY=${GHL_API_KEY}
+      - GHL_LOCATION_ID=${GHL_LOCATION_ID}
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.uapp.rule=Host(`uapp.${DOMAIN:-localhost}`)"
+      - "traefik.http.routers.uapp.entrypoints=websecure"
+      - "traefik.http.routers.uapp.tls.certresolver=letsencrypt"
+      - "traefik.http.services.uapp.loadbalancer.server.port=3100"
