@@ -1,0 +1,26 @@
+{
+  "name": "@uapp/aob-cli",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AOB CLI - Unified CLI across Ontraport, Stripe, Mighty Networks, WordPress",
+  "type": "module",
+  "bin": {
+    "aob": "dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "tsx": "^4.19.0",
+    "vitest": "^2.1.0",
+    "@types/node": "^22.0.0"
+  }
+}
