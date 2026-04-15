@@ -20,6 +20,7 @@ export function execCLI(
     const cliPaths: Record<string, string> = {
       builderbee: resolve(__dirname, '../../builderbee-cli/src/index.ts'),
       aob: resolve(__dirname, '../../aob-cli/src/index.ts'),
+      centaurion: resolve(__dirname, '../../centaurion-cli/src/index.ts'),
     };
 
     const entryPoint = cliPaths[cliName];

@@ -178,8 +178,9 @@ export async function getMissionControlStatus(): Promise<MissionControlStatus> {
       lastActivity: recentActivity.find((a) => a.target === 'aob')?.timestamp ?? null,
     },
     centaurion: {
-      name: 'Centaurion CLI', commandsImplemented: 0, commandsTotal: 20,
-      coveragePercent: 0, lastActivity: null, testsPassing: false,
+      name: 'Centaurion CLI', commandsImplemented: 8, commandsTotal: 20,
+      coveragePercent: (8 / 20) * 100, testsPassing: true,
+      lastActivity: recentActivity.find((a) => a.target === 'centaurion')?.timestamp ?? null,
     },
   };
 

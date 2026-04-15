@@ -55,7 +55,7 @@ async function status() {
   console.log('  --------------- ----------  -------');
   console.log('  BuilderBee      15 / 15     LIVE');
   console.log('  AOB             19 / 25     LIVE');
-  console.log('  Centaurion       0 / 20     PLANNED');
+  console.log('  Centaurion       8 / 20     LIVE');
   console.log('');
 }
 

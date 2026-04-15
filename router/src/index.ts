@@ -90,6 +90,40 @@ registerTarget({
   },
 });
 
+// Register Centaurion target
+registerTarget({
+  name: 'centaurion',
+  description: 'Meta-orchestration layer — agent registry, task routing, memory',
+  commands: [
+    'agents.list', 'agents.health', 'agents.get',
+    'route.task',
+    'memory.store', 'memory.relate', 'memory.query', 'memory.list',
+  ],
+  handler: async (command, args) => {
+    const startMs = Date.now();
+    try {
+      const result = await execCLI('centaurion', command, args);
+      const parsed = parseCLIOutput(result);
+      await logAudit({
+        timestamp: new Date().toISOString(),
+        target: 'centaurion', command,
+        success: result.exitCode === 0,
+        duration_ms: Date.now() - startMs,
+        error: result.exitCode === 0 ? undefined : result.stderr,
+      });
+      return parsed;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      await logAudit({
+        timestamp: new Date().toISOString(),
+        target: 'centaurion', command,
+        success: false, duration_ms: Date.now() - startMs, error: message,
+      });
+      throw err;
+    }
+  },
+});
+
 const port = parseInt(process.env.PORT ?? '3100', 10);
 
 serve({ fetch: app.fetch, port }, (info) => {
