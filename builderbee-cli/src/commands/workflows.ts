@@ -59,5 +59,61 @@ export function createWorkflowsCommand(): Command {
       }
     });
 
+  workflows
+    .command('pause')
+    .description('Pause (deactivate) a workflow')
+    .requiredOption('--workflow <id>', 'Workflow ID')
+    .option('--location <id>', 'Location ID (defaults to GHL_LOCATION_ID env)')
+    .option('--json', 'Output as JSON')
+    .action(async (opts) => {
+      try {
+        const config = loadConfig();
+        const locationId = opts.location ?? config.locationId;
+        if (!locationId) {
+          console.error(
+            formatError('MISSING_LOCATION', 'Provide --location or set GHL_LOCATION_ID env', { json: opts.json })
+          );
+          process.exitCode = 1;
+          return;
+        }
+
+        const adapter = new GHLAdapter(config);
+        const result = await adapter.pauseWorkflow(opts.workflow, locationId);
+        console.log(formatOutput(result, { json: opts.json }));
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : 'Unknown error';
+        console.error(formatError('WORKFLOW_PAUSE_FAILED', msg, { json: opts.json }));
+        process.exitCode = 1;
+      }
+    });
+
+  workflows
+    .command('status')
+    .description('Get the status of a specific workflow')
+    .requiredOption('--workflow <id>', 'Workflow ID')
+    .option('--location <id>', 'Location ID (defaults to GHL_LOCATION_ID env)')
+    .option('--json', 'Output as JSON')
+    .action(async (opts) => {
+      try {
+        const config = loadConfig();
+        const locationId = opts.location ?? config.locationId;
+        if (!locationId) {
+          console.error(
+            formatError('MISSING_LOCATION', 'Provide --location or set GHL_LOCATION_ID env', { json: opts.json })
+          );
+          process.exitCode = 1;
+          return;
+        }
+
+        const adapter = new GHLAdapter(config);
+        const workflow = await adapter.getWorkflowStatus(opts.workflow, locationId);
+        console.log(formatOutput(workflow, { json: opts.json }));
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : 'Unknown error';
+        console.error(formatError('WORKFLOW_STATUS_FAILED', msg, { json: opts.json }));
+        process.exitCode = 1;
+      }
+    });
+
   return workflows;
 }

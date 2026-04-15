@@ -55,6 +55,37 @@ export interface PaginatedResult<T> {
   hasMore: boolean;
 }
 
+export interface NewClient {
+  name: string;
+  email: string;
+  phone?: string;
+}
+
+export interface UpdateClient {
+  name?: string;
+  email?: string;
+  phone?: string;
+  status?: 'active' | 'inactive' | 'suspended';
+}
+
+export interface NewContact {
+  firstName: string;
+  lastName: string;
+  email?: string;
+  phone?: string;
+  tags?: string[];
+  source?: string;
+  locationId: string;
+}
+
+export interface UpdateContact {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  tags?: string[];
+}
+
 export interface GHLConfig {
   apiKey: string;
   locationId?: string;

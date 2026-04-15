@@ -103,6 +103,55 @@ export const mockWorkflows = {
   ],
 };
 
+export const mockCreatedClient = {
+  location: {
+    id: 'loc_004',
+    name: 'Delta Co',
+    email: 'admin@delta.com',
+    phone: '+9999999999',
+    status: 'active',
+    dateAdded: '2026-04-15T10:00:00Z',
+  },
+};
+
+export const mockUpdatedClient = {
+  location: {
+    id: 'loc_001',
+    name: 'Acme Corp Updated',
+    email: 'new@acme.com',
+    phone: '+1234567890',
+    status: 'inactive',
+    dateAdded: '2025-01-15T10:00:00Z',
+  },
+};
+
+export const mockCreatedContact = {
+  contact: {
+    id: 'con_003',
+    firstName: 'Alice',
+    lastName: 'Wonder',
+    email: 'alice@example.com',
+    phone: '+3333333333',
+    tags: ['new'],
+    source: 'api',
+    dateAdded: '2026-04-15T12:00:00Z',
+    locationId: 'loc_001',
+  },
+};
+
+export const mockUpdatedContact = {
+  contact: {
+    id: 'con_001',
+    firstName: 'John',
+    lastName: 'Updated',
+    email: 'john.new@example.com',
+    phone: '+1111111111',
+    tags: ['lead', 'vip'],
+    dateAdded: '2025-04-01T09:00:00Z',
+    locationId: 'loc_001',
+  },
+};
+
 export const mockSnapshots = {
   snapshots: [
     {

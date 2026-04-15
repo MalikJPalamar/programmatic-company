@@ -13,7 +13,10 @@
     "test": "npm run test --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
     "dev:router": "npm run dev -w router",
-    "lint": "npm run lint --workspaces --if-present"
+    "lint": "npm run lint --workspaces --if-present",
+    "mc": "tsx scripts/mission-control.ts",
+    "mc:status": "tsx scripts/mission-control.ts status",
+    "mc:next": "tsx scripts/mission-control.ts next"
   },
   "engines": {
     "node": ">=20.0.0"

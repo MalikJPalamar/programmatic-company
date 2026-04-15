@@ -3,8 +3,12 @@ import { GHLAdapter } from '../../src/adapters/ghl.js';
 import {
   mockClients,
   mockClient,
+  mockCreatedClient,
+  mockUpdatedClient,
   mockContacts,
   mockSearchResults,
+  mockCreatedContact,
+  mockUpdatedContact,
   mockWorkflows,
   mockSnapshots,
 } from '../fixtures/ghl-responses.js';
@@ -73,6 +77,36 @@ describe('GHLAdapter', () => {
     });
   });
 
+  describe('createClient', () => {
+    it('creates a new client', async () => {
+      mockFetch(mockCreatedClient);
+
+      const client = await adapter.createClient({ name: 'Delta Co', email: 'admin@delta.com' });
+      expect(client.id).toBe('loc_004');
+      expect(client.name).toBe('Delta Co');
+    });
+  });
+
+  describe('updateClient', () => {
+    it('updates an existing client', async () => {
+      mockFetch(mockUpdatedClient);
+
+      const client = await adapter.updateClient('loc_001', { name: 'Acme Corp Updated', status: 'inactive' });
+      expect(client.id).toBe('loc_001');
+      expect(client.name).toBe('Acme Corp Updated');
+      expect(client.status).toBe('inactive');
+    });
+  });
+
+  describe('deleteClient', () => {
+    it('deletes a client', async () => {
+      mockFetch({});
+
+      const result = await adapter.deleteClient('loc_001');
+      expect(result.success).toBe(true);
+    });
+  });
+
   describe('listContacts', () => {
     it('returns contacts for a location', async () => {
       mockFetch(mockContacts);
@@ -91,6 +125,33 @@ describe('GHLAdapter', () => {
       const results = await adapter.searchContacts('loc_001', 'John');
       expect(results).toHaveLength(1);
       expect(results[0].firstName).toBe('John');
+    });
+  });
+
+  describe('createContact', () => {
+    it('creates a new contact', async () => {
+      mockFetch(mockCreatedContact);
+
+      const contact = await adapter.createContact({
+        firstName: 'Alice',
+        lastName: 'Wonder',
+        email: 'alice@example.com',
+        locationId: 'loc_001',
+      });
+      expect(contact.id).toBe('con_003');
+      expect(contact.firstName).toBe('Alice');
+      expect(contact.lastName).toBe('Wonder');
+    });
+  });
+
+  describe('updateContact', () => {
+    it('updates an existing contact', async () => {
+      mockFetch(mockUpdatedContact);
+
+      const contact = await adapter.updateContact('con_001', { lastName: 'Updated', email: 'john.new@example.com' });
+      expect(contact.id).toBe('con_001');
+      expect(contact.lastName).toBe('Updated');
+      expect(contact.email).toBe('john.new@example.com');
     });
   });
 
@@ -114,6 +175,32 @@ describe('GHLAdapter', () => {
     });
   });
 
+  describe('pauseWorkflow', () => {
+    it('pauses a workflow', async () => {
+      mockFetch({});
+
+      const result = await adapter.pauseWorkflow('wf_001', 'loc_001');
+      expect(result.success).toBe(true);
+    });
+  });
+
+  describe('getWorkflowStatus', () => {
+    it('returns workflow status', async () => {
+      mockFetch(mockWorkflows);
+
+      const workflow = await adapter.getWorkflowStatus('wf_001', 'loc_001');
+      expect(workflow.id).toBe('wf_001');
+      expect(workflow.name).toBe('New Lead Nurture');
+      expect(workflow.status).toBe('active');
+    });
+
+    it('throws when workflow not found', async () => {
+      mockFetch(mockWorkflows);
+
+      await expect(adapter.getWorkflowStatus('wf_999', 'loc_001')).rejects.toThrow('not found');
+    });
+  });
+
   describe('listSnapshots', () => {
     it('returns available snapshots', async () => {
       mockFetch(mockSnapshots);
@@ -121,6 +208,17 @@ describe('GHLAdapter', () => {
       const snapshots = await adapter.listSnapshots();
       expect(snapshots).toHaveLength(2);
       expect(snapshots[0].name).toBe('Agency Starter Pack');
+    });
+  });
+
+  describe('deploySnapshot', () => {
+    it('deploys a snapshot to a location', async () => {
+      mockFetch({});
+
+      const result = await adapter.deploySnapshot('snap_001', 'loc_001');
+      expect(result.success).toBe(true);
+      expect(result.snapshotId).toBe('snap_001');
+      expect(result.locationId).toBe('loc_001');
     });
   });
 

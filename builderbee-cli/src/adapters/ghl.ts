@@ -6,6 +6,10 @@ import type {
   HealthScore,
   PaginatedResult,
   GHLConfig,
+  NewClient,
+  UpdateClient,
+  NewContact,
+  UpdateContact,
 } from '../types.js';
 
 export class GHLAdapter {
@@ -74,6 +78,27 @@ export class GHLAdapter {
     return this.mapClient(data.location);
   }
 
+  async createClient(input: NewClient): Promise<Client> {
+    const data = await this.request<{ location: unknown }>('/locations', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    });
+    return this.mapClient(data.location);
+  }
+
+  async updateClient(id: string, input: UpdateClient): Promise<Client> {
+    const data = await this.request<{ location: unknown }>(`/locations/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(input),
+    });
+    return this.mapClient(data.location);
+  }
+
+  async deleteClient(id: string): Promise<{ success: boolean }> {
+    await this.request(`/locations/${id}`, { method: 'DELETE' });
+    return { success: true };
+  }
+
   // --- Contacts ---
 
   async listContacts(
@@ -112,6 +137,22 @@ export class GHLAdapter {
     return (data.contacts ?? []).map((c: any) => this.mapContact(c));
   }
 
+  async createContact(input: NewContact): Promise<Contact> {
+    const data = await this.request<{ contact: unknown }>('/contacts', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    });
+    return this.mapContact(data.contact);
+  }
+
+  async updateContact(id: string, input: UpdateContact): Promise<Contact> {
+    const data = await this.request<{ contact: unknown }>(`/contacts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(input),
+    });
+    return this.mapContact(data.contact);
+  }
+
   // --- Workflows ---
 
   async listWorkflows(locationId: string): Promise<Workflow[]> {
@@ -134,11 +175,45 @@ export class GHLAdapter {
     return { success: true };
   }
 
+  async pauseWorkflow(
+    workflowId: string,
+    locationId: string
+  ): Promise<{ success: boolean }> {
+    await this.request(`/workflows/${workflowId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ locationId, status: 'inactive' }),
+    });
+    return { success: true };
+  }
+
+  async getWorkflowStatus(
+    workflowId: string,
+    locationId: string
+  ): Promise<Workflow> {
+    const workflows = await this.listWorkflows(locationId);
+    const workflow = workflows.find((w) => w.id === workflowId);
+    if (!workflow) {
+      throw new Error(`Workflow "${workflowId}" not found in location "${locationId}"`);
+    }
+    return workflow;
+  }
+
   // --- Snapshots ---
 
   async listSnapshots(): Promise<Snapshot[]> {
     const data = await this.request<{ snapshots: unknown[] }>('/snapshots');
     return (data.snapshots ?? []).map((s: any) => this.mapSnapshot(s));
+  }
+
+  async deploySnapshot(
+    snapshotId: string,
+    locationId: string
+  ): Promise<{ success: boolean; snapshotId: string; locationId: string }> {
+    await this.request(`/snapshots/${snapshotId}/deploy`, {
+      method: 'POST',
+      body: JSON.stringify({ locationId }),
+    });
+    return { success: true, snapshotId, locationId };
   }
 
   // --- Health ---

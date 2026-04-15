@@ -22,5 +22,23 @@ export function createSnapshotsCommand(): Command {
       }
     });
 
+  snapshots
+    .command('deploy')
+    .description('Deploy a snapshot to a location')
+    .requiredOption('--snapshot <id>', 'Snapshot ID')
+    .requiredOption('--location <id>', 'Target location ID')
+    .option('--json', 'Output as JSON')
+    .action(async (opts) => {
+      try {
+        const adapter = new GHLAdapter(loadConfig());
+        const result = await adapter.deploySnapshot(opts.snapshot, opts.location);
+        console.log(formatOutput(result, { json: opts.json }));
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : 'Unknown error';
+        console.error(formatError('SNAPSHOT_DEPLOY_FAILED', msg, { json: opts.json }));
+        process.exitCode = 1;
+      }
+    });
+
   return snapshots;
 }
