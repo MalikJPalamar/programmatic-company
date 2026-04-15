@@ -173,8 +173,9 @@ export async function getMissionControlStatus(): Promise<MissionControlStatus> {
       lastActivity: recentActivity.find((a) => a.target === 'builderbee')?.timestamp ?? null,
     },
     aob: {
-      name: 'AOB CLI', commandsImplemented: 0, commandsTotal: 25,
-      coveragePercent: 0, lastActivity: null, testsPassing: false,
+      name: 'AOB CLI', commandsImplemented: 19, commandsTotal: 25,
+      coveragePercent: (19 / 25) * 100, testsPassing: true,
+      lastActivity: recentActivity.find((a) => a.target === 'aob')?.timestamp ?? null,
     },
     centaurion: {
       name: 'Centaurion CLI', commandsImplemented: 0, commandsTotal: 20,

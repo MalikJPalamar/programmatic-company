@@ -54,7 +54,7 @@ async function status() {
   console.log('  TARGET          COMMANDS    STATUS');
   console.log('  --------------- ----------  -------');
   console.log('  BuilderBee      15 / 15     LIVE');
-  console.log('  AOB              0 / 25     PLANNED');
+  console.log('  AOB             19 / 25     LIVE');
   console.log('  Centaurion       0 / 20     PLANNED');
   console.log('');
 }
@@ -71,12 +71,12 @@ async function next() {
   console.log('  [x] Phase 3: Pipeline Integration + Mission Control');
   console.log('  [x] Phase 4: Remaining BB commands (8 more = 15 total)');
   console.log('');
-  console.log('  Milestone 2 - AOB CLI (next)');
-  console.log('  [ ] Phase 1: CRM Adapter Layer (Ontraport)');
-  console.log('  [ ] Phase 2: Multi-System Fusion Endpoints');
-  console.log('  [ ] Phase 3: Program & Certification Engine');
-  console.log('  [ ] Phase 4: Retreat & Booking Integration');
-  console.log('  [ ] Phase 5: Router Integration + Deployment');
+  console.log('  Milestone 2 - AOB CLI: 19/25 commands');
+  console.log('  [x] Phase 1: CRM Adapter Layer (Ontraport)');
+  console.log('  [x] Phase 2: Multi-System Fusion Endpoints');
+  console.log('  [x] Phase 3: Program & Certification Engine');
+  console.log('  [ ] Phase 4: Retreat & Booking Integration (6 remaining)');
+  console.log('  [x] Phase 5: Router Integration');
   console.log('');
 }
 

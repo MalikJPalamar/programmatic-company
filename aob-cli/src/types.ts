@@ -99,6 +99,16 @@ export interface CommunityAdapter {
   isActive(email: string): Promise<boolean>;
 }
 
+export interface ProgramAdapter {
+  listPrograms(options?: { status?: string }): Promise<Program[]>;
+  getProgram(id: string): Promise<Program>;
+  listCohorts(programId: string, options?: { status?: string }): Promise<Cohort[]>;
+  getCohort(programId: string, cohortId: string): Promise<Cohort>;
+  checkCertification(studentId: string, programId: string): Promise<Certification | null>;
+  issueCertification(studentId: string, programId: string): Promise<Certification>;
+  listCertifications(studentId: string): Promise<Certification[]>;
+}
+
 // --- Input Types ---
 
 export interface NewContact {

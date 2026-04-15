@@ -19,6 +19,7 @@ export function execCLI(
   return new Promise((resolve_, reject) => {
     const cliPaths: Record<string, string> = {
       builderbee: resolve(__dirname, '../../builderbee-cli/src/index.ts'),
+      aob: resolve(__dirname, '../../aob-cli/src/index.ts'),
     };
 
     const entryPoint = cliPaths[cliName];

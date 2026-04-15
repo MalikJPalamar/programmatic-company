@@ -52,6 +52,44 @@ registerTarget({
   },
 });
 
+// Register AOB target
+registerTarget({
+  name: 'aob',
+  description: 'Unified CLI across Ontraport, Stripe, Mighty Networks',
+  commands: [
+    'students.list', 'students.get', 'students.search',
+    'contacts.list', 'contacts.get', 'contacts.search', 'contacts.create', 'contacts.update',
+    'payments.list', 'payments.status',
+    'community.members', 'community.lookup',
+    'programs.list', 'programs.get',
+    'cohorts.list', 'cohorts.get',
+    'certifications.check', 'certifications.issue', 'certifications.list',
+  ],
+  handler: async (command, args) => {
+    const startMs = Date.now();
+    try {
+      const result = await execCLI('aob', command, args);
+      const parsed = parseCLIOutput(result);
+      await logAudit({
+        timestamp: new Date().toISOString(),
+        target: 'aob', command,
+        success: result.exitCode === 0,
+        duration_ms: Date.now() - startMs,
+        error: result.exitCode === 0 ? undefined : result.stderr,
+      });
+      return parsed;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      await logAudit({
+        timestamp: new Date().toISOString(),
+        target: 'aob', command,
+        success: false, duration_ms: Date.now() - startMs, error: message,
+      });
+      throw err;
+    }
+  },
+});
+
 const port = parseInt(process.env.PORT ?? '3100', 10);
 
 serve({ fetch: app.fetch, port }, (info) => {
