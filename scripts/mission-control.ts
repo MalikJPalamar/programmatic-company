@@ -54,8 +54,8 @@ async function status() {
   console.log('  TARGET          COMMANDS    STATUS');
   console.log('  --------------- ----------  -------');
   console.log('  BuilderBee      15 / 15     LIVE');
-  console.log('  AOB             19 / 25     LIVE');
-  console.log('  Centaurion       8 / 20     LIVE');
+  console.log('  AOB             25 / 25     LIVE');
+  console.log('  Centaurion      13 / 20     LIVE');
   console.log('');
 }
 

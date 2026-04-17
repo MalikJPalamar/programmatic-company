@@ -173,13 +173,13 @@ export async function getMissionControlStatus(): Promise<MissionControlStatus> {
       lastActivity: recentActivity.find((a) => a.target === 'builderbee')?.timestamp ?? null,
     },
     aob: {
-      name: 'AOB CLI', commandsImplemented: 19, commandsTotal: 25,
-      coveragePercent: (19 / 25) * 100, testsPassing: true,
+      name: 'AOB CLI', commandsImplemented: 25, commandsTotal: 25,
+      coveragePercent: 100, testsPassing: true,
       lastActivity: recentActivity.find((a) => a.target === 'aob')?.timestamp ?? null,
     },
     centaurion: {
-      name: 'Centaurion CLI', commandsImplemented: 8, commandsTotal: 20,
-      coveragePercent: (8 / 20) * 100, testsPassing: true,
+      name: 'Centaurion CLI', commandsImplemented: 13, commandsTotal: 20,
+      coveragePercent: (13 / 20) * 100, testsPassing: true,
       lastActivity: recentActivity.find((a) => a.target === 'centaurion')?.timestamp ?? null,
     },
   };

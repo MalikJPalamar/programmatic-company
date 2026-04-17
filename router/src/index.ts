@@ -64,6 +64,8 @@ registerTarget({
     'programs.list', 'programs.get',
     'cohorts.list', 'cohorts.get',
     'certifications.check', 'certifications.issue', 'certifications.list',
+    'retreats.list', 'retreats.get', 'retreats.availability',
+    'retreats.bookings', 'retreats.book', 'retreats.booking',
   ],
   handler: async (command, args) => {
     const startMs = Date.now();
@@ -98,6 +100,9 @@ registerTarget({
     'agents.list', 'agents.health', 'agents.get',
     'route.task',
     'memory.store', 'memory.relate', 'memory.query', 'memory.list',
+    'sa-scan.run', 'sa-scan.ticker',
+    'inference.run', 'inference.history',
+    'do',
   ],
   handler: async (command, args) => {
     const startMs = Date.now();

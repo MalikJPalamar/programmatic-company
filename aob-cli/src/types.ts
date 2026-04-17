@@ -109,6 +109,42 @@ export interface ProgramAdapter {
   listCertifications(studentId: string): Promise<Certification[]>;
 }
 
+// --- Retreat & Booking ---
+
+export interface Retreat {
+  id: string;
+  name: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  capacity: number;
+  spotsRemaining: number;
+  price: number;
+  currency: string;
+  status: 'upcoming' | 'active' | 'completed' | 'cancelled';
+}
+
+export interface Booking {
+  id: string;
+  retreatId: string;
+  retreatName: string;
+  guestName: string;
+  guestEmail: string;
+  status: 'confirmed' | 'pending' | 'cancelled' | 'waitlisted';
+  bookedAt: string;
+  amount: number;
+  currency: string;
+}
+
+export interface RetreatAdapter {
+  listRetreats(options?: { location?: string; upcoming?: boolean }): Promise<Retreat[]>;
+  getRetreat(id: string): Promise<Retreat>;
+  listBookings(retreatId: string): Promise<Booking[]>;
+  getBooking(id: string): Promise<Booking>;
+  createBooking(retreatId: string, guest: { name: string; email: string }): Promise<Booking>;
+  checkAvailability(retreatId: string): Promise<{ available: boolean; spotsRemaining: number }>;
+}
+
 // --- Input Types ---
 
 export interface NewContact {
