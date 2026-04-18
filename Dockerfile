@@ -37,8 +37,6 @@ COPY --from=builder /app/aob-cli/dist ./aob-cli/dist
 COPY --from=builder /app/centaurion-cli/package.json ./centaurion-cli/
 COPY --from=builder /app/centaurion-cli/dist ./centaurion-cli/dist
 
-COPY autoresearch ./autoresearch
-
 ENV NODE_ENV=production
 ENV PORT=3100
 

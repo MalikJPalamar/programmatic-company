@@ -2,9 +2,7 @@ node_modules
 dist
 .git
 .github
-*.md
-!README.md
-autoresearch
-.planning
 *.test.ts
 tests
+.planning
+.mission-control
