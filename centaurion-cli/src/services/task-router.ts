@@ -29,6 +29,13 @@ const PATTERNS: TaskPattern[] = [
   { keywords: ['check certification', 'is certified', 'certification status'], target: 'aob', command: 'certifications.check' },
   { keywords: ['issue certification', 'certify student', 'grant certification'], target: 'aob', command: 'certifications.issue' },
   { keywords: ['enroll student', 'enrollment'], target: 'aob', command: 'students.get' },
+  { keywords: ['retreat', 'booking', 'book retreat'], target: 'aob', command: 'retreats.list' },
+
+  // Centaurion patterns
+  { keywords: ['sa scan', 'situational awareness', 'scan tickers', 'market scan'], target: 'centaurion', command: 'sa-scan.run' },
+  { keywords: ['pipeline health', 'system health', 'check pipeline'], target: 'centaurion', command: 'pipeline.health' },
+  { keywords: ['agent list', 'list agents', 'show agents'], target: 'centaurion', command: 'agents.list' },
+  { keywords: ['config check', 'check config', 'configuration'], target: 'centaurion', command: 'config.check' },
 ];
 
 export class TaskRouter {

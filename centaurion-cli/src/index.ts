@@ -6,6 +6,9 @@ import { createMemoryCommand } from './commands/memory.js';
 import { createSAScanCommand } from './commands/sa-scan.js';
 import { createInferenceCommand } from './commands/inference.js';
 import { createDoCommand } from './commands/do.js';
+import { createPipelineCommand } from './commands/pipeline.js';
+import { createConfigCommand } from './commands/config.js';
+import { createDispatchCommand } from './commands/dispatch.js';
 
 const program = new Command();
 
@@ -20,5 +23,8 @@ program.addCommand(createMemoryCommand());
 program.addCommand(createSAScanCommand());
 program.addCommand(createInferenceCommand());
 program.addCommand(createDoCommand());
+program.addCommand(createPipelineCommand());
+program.addCommand(createConfigCommand());
+program.addCommand(createDispatchCommand());
 
 program.parse();

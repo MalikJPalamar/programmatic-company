@@ -30,6 +30,23 @@ const BUILTIN_AGENTS: Agent[] = [
     ],
     status: 'active',
   },
+  {
+    id: 'centaurion',
+    name: 'Centaurion',
+    target: 'centaurion',
+    description: 'Meta-orchestration — agent registry, routing, memory, SA scanner, inference',
+    commands: [
+      'agents.list', 'agents.health', 'agents.get',
+      'route.task', 'do',
+      'memory.store', 'memory.relate', 'memory.query', 'memory.list',
+      'sa-scan.run', 'sa-scan.ticker',
+      'inference.run', 'inference.history',
+      'pipeline.health', 'pipeline.status',
+      'config.list', 'config.check', 'config.get',
+      'dispatch.telegram',
+    ],
+    status: 'active',
+  },
 ];
 
 export class AgentRegistry {

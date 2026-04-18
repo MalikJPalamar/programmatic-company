@@ -103,6 +103,9 @@ registerTarget({
     'sa-scan.run', 'sa-scan.ticker',
     'inference.run', 'inference.history',
     'do',
+    'pipeline.health', 'pipeline.status',
+    'config.list', 'config.check', 'config.get',
+    'dispatch.telegram',
   ],
   handler: async (command, args) => {
     const startMs = Date.now();
