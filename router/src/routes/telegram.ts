@@ -106,7 +106,7 @@ telegramRoutes.post('/webhook/telegram', async (c) => {
   // Route natural language through Centaurion
   const startMs = Date.now();
   try {
-    const routeResult = await execCLI('centaurion', 'route.task', { task: text });
+    const routeResult = await execCLI('centaurion', 'route.task', { _positional: [text] });
     const decision = parseCLIOutput(routeResult) as {
       target?: string;
       command?: string;

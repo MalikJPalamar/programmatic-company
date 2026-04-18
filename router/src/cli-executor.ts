@@ -29,18 +29,32 @@ export function execCLI(
       return;
     }
 
+    // Split "clients.list" → ["clients", "list"]
     const commandParts = command.split('.');
 
-    const cliArgs: string[] = [...commandParts, '--json'];
+    // Separate positional args from flag args
+    // Convention: _positional is an array of positional args, everything else is a --flag
+    const positionalArgs: string[] = [];
+    const flagArgs: string[] = [];
+
     if (args) {
       for (const [key, value] of Object.entries(args)) {
-        if (typeof value === 'boolean') {
-          if (value) cliArgs.push(`--${key}`);
+        if (key === '_positional') {
+          if (Array.isArray(value)) {
+            positionalArgs.push(...value.map(String));
+          } else if (value !== undefined && value !== null) {
+            positionalArgs.push(String(value));
+          }
+        } else if (typeof value === 'boolean') {
+          if (value) flagArgs.push(`--${key}`);
         } else if (value !== undefined && value !== null) {
-          cliArgs.push(`--${key}`, String(value));
+          flagArgs.push(`--${key}`, String(value));
         }
       }
     }
+
+    // Build: [command parts] [positional args] [--json] [--flag args]
+    const cliArgs: string[] = [...commandParts, ...positionalArgs, '--json', ...flagArgs];
 
     const runner = process.env.NODE_ENV === 'production' ? 'node' : 'tsx';
     const entry =

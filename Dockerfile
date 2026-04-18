@@ -25,7 +25,7 @@ WORKDIR /app
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/node_modules ./node_modules
 
-COPY --from=builder /app/router/package.json /app/router/dist ./router/
+COPY --from=builder /app/router/package.json ./router/
 COPY --from=builder /app/router/dist ./router/dist
 
 COPY --from=builder /app/builderbee-cli/package.json ./builderbee-cli/
