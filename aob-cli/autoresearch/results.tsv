@@ -1,0 +1,2 @@
+date	cycle	cs	acc	act	cov	method_v	experiment	status	description
+2026-04-15	v1	100.0	100.0	100.0	100.0	v1.0	baseline	keep	AOB complete: 25/25 commands, 42 tests, all adapters with retry

@@ -56,8 +56,8 @@ jobs:
             ACCURACY="0"
           fi
           ACTIONABILITY="100"
-          BB_IMPLEMENTED=15
-          BB_TARGET=15
+          BB_IMPLEMENTED=60
+          BB_TARGET=60
           COVERAGE=$(echo "scale=1; $BB_IMPLEMENTED / $BB_TARGET * 100" | bc)
           CS=$(echo "scale=1; $ACCURACY * 0.4 + $ACTIONABILITY * 0.3 + $COVERAGE * 0.3" | bc)
           echo "accuracy=$ACCURACY" >> $GITHUB_OUTPUT

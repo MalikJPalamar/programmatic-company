@@ -8,6 +8,7 @@ import { healthRoutes } from './routes/health.js';
 import { routeRoutes } from './routes/route.js';
 import { missionControlRoutes } from './routes/mission-control.js';
 import { monitoringRoutes } from './routes/monitoring.js';
+import { telegramRoutes } from './routes/telegram.js';
 
 export function createApp() {
   const app = new Hono();
@@ -19,6 +20,9 @@ export function createApp() {
 
   // Public endpoints
   app.route('/', healthRoutes);
+
+  // Telegram webhook — validated by token in URL, not API key
+  app.route('/', telegramRoutes);
 
   // Rate-limited + auth-required endpoints
   app.use('/route', rateLimit({ windowMs: 60_000, maxRequests: 100 }));
@@ -40,18 +44,17 @@ export function createApp() {
   app.get('/', (c) => {
     return c.json({
       name: 'UAPP Router',
-      version: '0.2.0',
+      version: '0.3.0',
       description: 'Universal Agent-to-Production Pipeline',
       endpoints: {
         'GET /health': 'Health check (public)',
         'GET /targets': 'List registered targets (auth required)',
         'POST /route': 'Route command to target CLI (auth required, rate limited)',
+        'POST /webhook/telegram': 'Telegram bot webhook (public, token-validated)',
+        'POST /webhook/telegram/setup': 'Register webhook URL with Telegram (auth required)',
         'GET /mission-control': 'Pipeline status dashboard (auth required)',
-        'GET /mission-control/report': 'Generate daily report (auth required)',
-        'POST /mission-control/score': 'Score a development cycle (auth required)',
-        'GET /mission-control/audit': 'Recent audit log (auth required)',
-        'GET /monitoring': 'Request metrics summary (auth required)',
-        'GET /monitoring/live': 'Live health status (auth required)',
+        'GET /monitoring': 'Request metrics (auth required)',
+        'GET /monitoring/live': 'Live health (auth required)',
       },
     });
   });
