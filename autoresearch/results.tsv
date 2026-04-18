@@ -1,2 +1,6 @@
 date	cycle	cs	acc	act	cov	method_v	experiment	status	description
-2026-04-15	v1	100.0	100.0	100.0	100.0	v1.0	baseline	keep	BuilderBee complete: 15/15 commands, 49 tests passing, Mission Control live
+2026-04-15	v1	70.0	60.0	100.0	46.7	v1.0	baseline	keep	Foundation: router + 7 BB commands, 40 tests
+2026-04-15	v2	86.0	100.0	100.0	56.7	v1.0	full-bb	keep	BuilderBee complete: 15/15 commands, Mission Control live
+2026-04-15	v3	92.0	100.0	100.0	73.3	v1.0	aob-phases1-3	keep	AOB Phases 1-3: 19 commands, student fusion, programs
+2026-04-15	v4	97.0	100.0	100.0	88.3	v1.0	aob-complete	keep	AOB complete 25/25 + Centaurion 13/20, SA scanner live
+2026-04-15	v5	100.0	100.0	100.0	100.0	v1.0	all-complete	keep	All CLIs complete: 60 commands, 150 tests, M4 hardening done
