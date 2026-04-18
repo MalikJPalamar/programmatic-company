@@ -1,4 +1,5 @@
 import type { RetreatAdapter, Retreat, Booking } from '../types.js';
+import { withRetry } from '../utils/retry.js';
 
 export interface RetreatGuruConfig {
   apiKey: string;
@@ -15,19 +16,21 @@ export class RetreatGuruAdapter implements RetreatAdapter {
   }
 
   private async request<T>(path: string, options?: RequestInit): Promise<T> {
-    const sep = path.includes('?') ? '&' : '?';
-    const url = `${this.baseUrl}${path}${sep}api_key=${this.apiKey}`;
-    const response = await fetch(url, {
-      ...options,
-      headers: { 'Content-Type': 'application/json', ...options?.headers },
+    return withRetry(async () => {
+      const sep = path.includes('?') ? '&' : '?';
+      const url = `${this.baseUrl}${path}${sep}api_key=${this.apiKey}`;
+      const response = await fetch(url, {
+        ...options,
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+      });
+
+      if (!response.ok) {
+        const body = await response.text().catch(() => 'Unknown error');
+        throw new Error(`RetreatGuru API error (${response.status}): ${body}`);
+      }
+
+      return response.json() as Promise<T>;
     });
-
-    if (!response.ok) {
-      const body = await response.text().catch(() => 'Unknown error');
-      throw new Error(`RetreatGuru API error (${response.status}): ${body}`);
-    }
-
-    return response.json() as Promise<T>;
   }
 
   async listRetreats(options?: { location?: string; upcoming?: boolean }): Promise<Retreat[]> {

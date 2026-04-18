@@ -1,4 +1,5 @@
 import type { CRMAdapter, UnifiedContact, PaginatedResult, NewContact } from '../types.js';
+import { withRetry } from '../utils/retry.js';
 
 export interface OntraportConfig {
   apiKey: string;
@@ -18,22 +19,24 @@ export class OntraportAdapter implements CRMAdapter {
   }
 
   private async request<T>(path: string, options?: RequestInit): Promise<T> {
-    const response = await fetch(`${this.baseUrl}${path}`, {
-      ...options,
-      headers: {
-        'Api-Key': this.apiKey,
-        'Api-Appid': this.appId,
-        'Content-Type': 'application/json',
-        ...options?.headers,
-      },
+    return withRetry(async () => {
+      const response = await fetch(`${this.baseUrl}${path}`, {
+        ...options,
+        headers: {
+          'Api-Key': this.apiKey,
+          'Api-Appid': this.appId,
+          'Content-Type': 'application/json',
+          ...options?.headers,
+        },
+      });
+
+      if (!response.ok) {
+        const body = await response.text().catch(() => 'Unknown error');
+        throw new Error(`Ontraport API error (${response.status}): ${body}`);
+      }
+
+      return response.json() as Promise<T>;
     });
-
-    if (!response.ok) {
-      const body = await response.text().catch(() => 'Unknown error');
-      throw new Error(`Ontraport API error (${response.status}): ${body}`);
-    }
-
-    return response.json() as Promise<T>;
   }
 
   async listContacts(options?: { limit?: number; offset?: number; tag?: string }): Promise<PaginatedResult<UnifiedContact>> {

@@ -1,4 +1,5 @@
 import type { PaymentAdapter, PaymentRecord } from '../types.js';
+import { withRetry } from '../utils/retry.js';
 
 export interface StripeConfig {
   secretKey: string;
@@ -15,21 +16,23 @@ export class StripeAdapter implements PaymentAdapter {
   }
 
   private async request<T>(path: string, options?: RequestInit): Promise<T> {
-    const response = await fetch(`${this.baseUrl}${path}`, {
-      ...options,
-      headers: {
-        'Authorization': `Bearer ${this.secretKey}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-        ...options?.headers,
-      },
+    return withRetry(async () => {
+      const response = await fetch(`${this.baseUrl}${path}`, {
+        ...options,
+        headers: {
+          'Authorization': `Bearer ${this.secretKey}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+          ...options?.headers,
+        },
+      });
+
+      if (!response.ok) {
+        const body = await response.text().catch(() => 'Unknown error');
+        throw new Error(`Stripe API error (${response.status}): ${body}`);
+      }
+
+      return response.json() as Promise<T>;
     });
-
-    if (!response.ok) {
-      const body = await response.text().catch(() => 'Unknown error');
-      throw new Error(`Stripe API error (${response.status}): ${body}`);
-    }
-
-    return response.json() as Promise<T>;
   }
 
   async getCustomer(id: string): Promise<{ id: string; email: string; name: string }> {

@@ -11,6 +11,7 @@ import type {
   NewContact,
   UpdateContact,
 } from '../types.js';
+import { withRetry } from '../utils/retry.js';
 
 export class GHLAdapter {
   private apiKey: string;
@@ -24,23 +25,25 @@ export class GHLAdapter {
   }
 
   private async request<T>(path: string, options?: RequestInit): Promise<T> {
-    const url = `${this.baseUrl}${path}`;
-    const response = await fetch(url, {
-      ...options,
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json',
-        'Version': '2021-07-28',
-        ...options?.headers,
-      },
+    return withRetry(async () => {
+      const url = `${this.baseUrl}${path}`;
+      const response = await fetch(url, {
+        ...options,
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+          'Version': '2021-07-28',
+          ...options?.headers,
+        },
+      });
+
+      if (!response.ok) {
+        const body = await response.text().catch(() => 'Unknown error');
+        throw new Error(`GHL API error (${response.status}): ${body}`);
+      }
+
+      return response.json() as Promise<T>;
     });
-
-    if (!response.ok) {
-      const body = await response.text().catch(() => 'Unknown error');
-      throw new Error(`GHL API error (${response.status}): ${body}`);
-    }
-
-    return response.json() as Promise<T>;
   }
 
   // --- Clients (Sub-accounts / Locations) ---
